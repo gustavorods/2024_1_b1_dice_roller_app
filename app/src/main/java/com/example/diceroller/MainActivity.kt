@@ -98,7 +98,7 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
         OutlinedTextField(
             value = chuteDoUsuario,
             onValueChange = {chuteDoUsuario = it},
-            label = { Text("Digite sua tentativa ") },
+            label = { Text("Digite sua tentativa:") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
