@@ -24,8 +24,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +39,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -70,6 +73,9 @@ fun DiceRollerApp() {
 @Composable
 fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
     var result by remember { mutableStateOf( 1) }
+    var chuteDoUsuario by remember { mutableStateOf("") }
+    var ResultadoDaAposta by remember { mutableStateOf("") }
+
     val imageResource = when(result) {
         1 -> R.drawable.dice_1
         2 -> R.drawable.dice_2
@@ -82,9 +88,35 @@ fun DiceWithButtonAndImage(modifier: Modifier = Modifier) {
         Image(painter = painterResource(imageResource), contentDescription = result.toString())
         
         Button(
-            onClick = { result = (1..6).random() },
+            onClick = { result = (1..6).random()
+                        ResultadoDaAposta = verificacaoDaAposta(chuteDoUsuario.toInt(), result)
+            },
         ) {
             Text(text = stringResource(R.string.roll), fontSize = 24.sp)
         }
+
+        OutlinedTextField(
+            value = chuteDoUsuario,
+            onValueChange = {chuteDoUsuario = it},
+            label = { Text("Digite sua tentativa ") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+        )
+
+        Text(
+            text = ResultadoDaAposta,
+            modifier = modifier
+        )
+    }
+}
+
+fun verificacaoDaAposta(chute: Int, numCerto: Int): String {
+    if(chute in 1..6) {
+        if(chute == numCerto) {
+            return  "Parabéns vc a acertou o resultado!"
+        } else {
+            return "Que pena, vc não acertou o resultado!"
+        }
+    } else {
+        return "Tu digitou um valor nada av com o dado!"
     }
 }
